@@ -32,6 +32,11 @@ before_yesterday_price = before_yesterday_data['4. close']
 # Comparing the difference between yesterday's and today's price
 difference = round(abs(float(before_yesterday_price) - float(yesterday_closing_price)), 2)
 percentage = round(difference / float(before_yesterday_price) * 100, 3)
+up_down = None
+if difference > 0:
+    up_down = "🔼"
+else:
+    up_down = "🔻"
 
 # Only if difference will be more than 1% then following code will be output.
 if percentage > 1:
@@ -43,7 +48,7 @@ if percentage > 1:
     response_news = requests.get(NEWS_ENDPOINT, params=params_news)
     data = response_news.json()
     three_articles = data['articles'][:3]
-    info_needed = [f"Headline: {x['title']}. \nBried: {x['description']}" for x in three_articles]
+    info_needed = [f"{STOCK_NAME}: {up_down}{percentage}%\nHeadline: {x['title']}. \nBried: {x['description']}" for x in three_articles]
 
 # Here I am connecting to Twilio API, that can sms/call etc via
     # virtual number to the real number(here is
